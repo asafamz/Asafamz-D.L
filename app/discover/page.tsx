@@ -1,0 +1,1 @@
+export default function DiscoverPage(){return <main className="shell"><div className="card centered"><h1>Asafamz Digital Library</h1><p className="desc">Digital products for Asafamz customers.</p></div></main>}
