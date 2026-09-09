@@ -1,6 +1,6 @@
 import { checkExperienceAccess } from "@/lib/whop-access";
 import { FILE_METADATA_KEY, productDefaults } from "@/lib/catalog";
-import { whopsdk } from "@/lib/whop-sdk";
+import { whopsdk, retrieveWhopFile } from "@/lib/whop-sdk";
 
 export default async function ExperiencePage({ params }: { params: Promise<{ experienceId: string }> }) {
   const { experienceId } = await params;
@@ -23,7 +23,7 @@ export default async function ExperiencePage({ params }: { params: Promise<{ exp
       description = product.description || description;
       const fileId = product.metadata?.[FILE_METADATA_KEY] as string | undefined;
       if (fileId) {
-        const file = await whopsdk.files.retrieve(fileId);
+        const file = await retrieveWhopFile(fileId);
         if (file.upload_status === "ready" && file.url) fileUrl = file.url;
       }
     }
