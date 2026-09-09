@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { FILE_METADATA_KEY } from "@/lib/catalog";
 import { checkCompanyAdmin } from "@/lib/whop-access";
-import { whopsdk } from "@/lib/whop-sdk";
+import { whopsdk, retrieveWhopFile } from "@/lib/whop-sdk";
 
 export async function POST(request: Request) {
   try {
@@ -11,7 +11,7 @@ export async function POST(request: Request) {
     const access = await checkCompanyAdmin(companyId);
     if (access.access_level !== "admin") return NextResponse.json({ error: "Admin access required." }, { status: 403 });
 
-    const file = await whopsdk.files.retrieve(fileId);
+    const file = await retrieveWhopFile(fileId);
     if (file.upload_status !== "ready") return NextResponse.json({ error: `File is not ready yet (${file.upload_status}).` }, { status: 409 });
 
     const product = await whopsdk.products.retrieve(productId);
