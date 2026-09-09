@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { checkCompanyAdmin } from "@/lib/whop-access";
-import { whopsdk } from "@/lib/whop-sdk";
+import { createWhopFile } from "@/lib/whop-sdk";
 
 export async function POST(request: Request) {
   try {
@@ -11,7 +11,7 @@ export async function POST(request: Request) {
     const access = await checkCompanyAdmin(companyId);
     if (access.access_level !== "admin") return NextResponse.json({ error: "Admin access required." }, { status: 403 });
 
-    const file = await whopsdk.files.create({ filename, visibility: "private" });
+    const file = await createWhopFile(filename);
     return NextResponse.json({ id: file.id, uploadUrl: file.upload_url, uploadHeaders: file.upload_headers });
   } catch (error) {
     console.error(error);
